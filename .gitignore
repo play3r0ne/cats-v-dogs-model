@@ -1,0 +1,13 @@
+# Ignore virtual environment
+venv/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore system files
+.DS_Store
+
+# Ignore CIFAR-10 dataset
+data/cifar-10-batches-py/
+data/cifar-10-python.tar.gz
