@@ -45,6 +45,10 @@ if user_image is not None:
     probs = F.softmax(outputs, dim=1)
     pred_class = torch.argmax(probs, dim=1).item()
     labels = ["Cat 🐱", "Dog 🐶"]
-    slt.text(f"Prediction: {labels[pred_class]} (probability: {probs[0][pred_class]:.2f})")
-    slt.image(user_image)
 
+    if probs[0][pred_class] < 0.7:
+        slt.text(f"I don't think this is a cat or a dog (probability: {probs[0][pred_class]:.2f})")
+        slt.image(user_image)
+    else:
+        slt.text(f"Prediction: {labels[pred_class]} (probability: {probs[0][pred_class]:.2f})")
+        slt.image(user_image)
