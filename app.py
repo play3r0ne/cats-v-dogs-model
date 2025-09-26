@@ -42,13 +42,21 @@ if user_image is not None:
     img_tensor = preprocess_image(user_image)
     with torch.no_grad():
         outputs = model(img_tensor)
-    probs = F.softmax(outputs, dim=1)
-    pred_class = torch.argmax(probs, dim=1).item()
+    probs = F.softmax(outputs, dim=1)[0]
+    pred_class = torch.argmax(probs).item()
     labels = ["Cat 🐱", "Dog 🐶"]
 
-    if probs[0][pred_class] < 0.7:
-        slt.text(f"I don't think this is a cat or a dog (probability: {probs[0][pred_class]:.2f})")
+    if probs[pred_class] < 0.8:
+        slt.text(f"I don't think this is a cat or a dog (probability: {probs[pred_class]:.2f})")
         slt.image(user_image)
     else:
-        slt.text(f"Prediction: {labels[pred_class]} (probability: {probs[0][pred_class]:.2f})")
+        slt.text(f"Prediction: {labels[pred_class]} (probability: {probs[pred_class]:.2f})")
         slt.image(user_image)
+
+    slt.subheader("Confidence")
+    cols = slt.columns(len(labels))
+
+    for col, lbs, p in zip(cols, labels, probs):
+        col.write(f"**{lbs}**")
+        col.progress(int(p * 100))
+        col.caption(f"{p:.2%}")
