@@ -13,7 +13,7 @@ torch.backends.cudnn.benchmark = True
 def main():
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
@@ -54,7 +54,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    epochs = 10
+    epochs = 30
     for epoch in range(epochs):
         model.train()
         running_loss, correct, total = 0.0, 0, 0
@@ -80,7 +80,7 @@ def main():
 
         print(f"Epoch [{epoch+1}/{epochs}] "
               f"Loss: {running_loss/len(trainloader):.4f}, "
-              f"Accuracy: {100*correct/total:.2f}%"
+              f"Accuracy: {100*correct/total:.2f}%, "
               f"Time: {epoch_time:.2f} seconds")
     
     torch.save(model.state_dict(), "cnn_cat_dog.pth")
